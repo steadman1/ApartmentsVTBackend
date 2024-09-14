@@ -1,5 +1,5 @@
-from . import auth_bp
-from ..db_config import db
+from server.auth import auth_bp
+from server.db_config import db
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, gen_salt, check_password_hash
 from server.auth.models import User
@@ -8,7 +8,7 @@ from server.auth.models import User
 def signup():
     data = request.get_json()
 
-    if not data or not 'username' in data or not 'email' in data or not 'password' in data:
+    if not all(key in data for key in ('first_name', 'last_name', 'username', 'email', 'phone_number', 'password')):
         return jsonify({"error": "Missing required fields"}), 400
 
     first_name = data['first_name']
@@ -36,3 +36,22 @@ def signup():
 
     db.session.add(new_user)
     db.session.commit()
+
+    return 200
+
+@auth_bp.route("/login", methods=["POST"])
+def login():
+     data = request.get_json()
+     if not 'email' in data or not 'password' in data:
+          return jsonify({"error": "Missing required fields"}), 400
+     
+     email = data['email']
+     user = User.query.filter_by(email=email).first()
+
+     if not user:
+          return jsonify({"error": "User not found"}), 404
+
+     password = data['password'] + user.password_salt
+
+     if check_password_hash(user.password_hash, password):
+          pass
