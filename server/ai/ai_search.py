@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from server.posts.models import Post
 from server import create_app
 
-app = create_app()
+# app = create_app()
 
 # Load environment variables from .env file
 load_dotenv()
