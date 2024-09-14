@@ -44,13 +44,13 @@ def upload_image():
             image = Image(
                 post=post,
                 user=user,
-                url=f'/images/get/{filename}',  # The URL for the uploaded image
+                url=f'/images/{filename}',  # The URL for the uploaded image
                 location=file_path  # The location of the file on the server
             )
         else:
             image = Image(
                 user=user,
-                url=f'/images/get/{filename}',  # The URL for the uploaded image
+                url=f'/images/{filename}',  # The URL for the uploaded image
                 location=file_path  # The location of the file on the server
             )
 
@@ -61,12 +61,12 @@ def upload_image():
         db.session.add(image)
         db.session.commit()
 
-        return jsonify({"success": f"{request.host_url}images/get/{filename}"}), 200
+        return jsonify({"success": f"{request.host_url}images/{filename}"}), 200
 
     return jsonify(msg="Invalid file type"), 400
 
 # Route to serve uploaded files
-@images_bp.route('/get/<filename>')
+@images_bp.route('/<filename>')
 def uploaded_file(filename):
     extension = filename.rsplit('.', 1)[1].lower()
     return send_file(os.path.join(current_app.config['UPLOAD_FOLDER'], filename), mimetype=f'image/{extension}')
