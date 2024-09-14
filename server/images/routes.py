@@ -47,7 +47,7 @@ def upload_image():
         db.session.add(image)
         db.session.commit()
 
-        return jsonify(msg='Image successfully uploaded and associated with post!'), 200
+        return jsonify({"success": f"{request.host_url}images/get/{filename}"}), 200
 
     return jsonify(msg="Invalid file type"), 400
 
