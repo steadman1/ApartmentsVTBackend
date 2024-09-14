@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify, abort
-from .ai_search import ai_search
+from server.ai.ai_search import ai_search
+from server.ai import ai_bp
 
-# Define the AI blueprint
-ai_bp = Blueprint('ai', __name__)
 
 @ai_bp.route('/search/ai', methods=['POST'])
 def search_with_ai():
