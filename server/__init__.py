@@ -22,4 +22,7 @@ def create_app():
     from server.images import images_bp
     app.register_blueprint(images_bp)
 
+    from server.ai.routes import ai_bp
+    app.register_blueprint(ai_bp)
+
     return app
