@@ -1,26 +1,10 @@
-from ..app import db
+from ..db_config import db
 from datetime import datetime
 
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-
-db = SQLAlchemy()
-
-# Assuming a User model exists
-class User(db.Model):
-    __tablename__ = 'user'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    # Other user fields like username, email, etc.
 
 class Post(db.Model):
-    __tablename__ = 'post'
-    
     id = db.Column(db.Integer, primary_key=True)
-    
-    # Foreign key to link to the user who created the post
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('posts', lazy=True))
     
     # Basic details
     title = db.Column(db.String(255), nullable=False)
@@ -70,17 +54,7 @@ class Post(db.Model):
     custom_fields = db.Column(db.JSON)
     
     # Relationship to images
-    images = db.relationship('Image', backref='post', lazy=True)
+    images = db.relationship('Image', backref='post')
     
     def __repr__(self):
         return f'<Post {self.title}>'
-
-class Image(db.Model):
-    __tablename__ = 'image'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    url = db.Column(db.String(255), nullable=False)  # URL to the image
-    
-    def __repr__(self):
-        return f'<Image {self.url}>'
