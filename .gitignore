@@ -48,5 +48,5 @@ __pycache__/
 
 # Project Files #
 #################
-./image_uploads/
+image_uploads/
 ./main.db
