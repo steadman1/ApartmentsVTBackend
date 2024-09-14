@@ -5,6 +5,8 @@ from db_config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 
+from auth.models import User
+from posts.models import Post
 db = SQLAlchemy(app)
 
 from auth import auth_bp
