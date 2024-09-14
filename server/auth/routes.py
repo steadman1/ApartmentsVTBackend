@@ -65,6 +65,6 @@ def login():
 @auth_bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
 def refresh():
-     user = get_jwt_identity()
-     access_token = create_access_token(identity=user)
+     user_id = get_jwt_identity()
+     access_token = create_access_token(identity=user_id)
      return jsonify(access_token=access_token), 200
