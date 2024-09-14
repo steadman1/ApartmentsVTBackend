@@ -19,6 +19,7 @@ class User(db.Model):
     
     # Relationship to posts
     posts = db.relationship('Post', backref='user')
+    images = db.relationship('Image', backref='user')
     
     def __repr__(self):
         return f'<User {self.username}>'
