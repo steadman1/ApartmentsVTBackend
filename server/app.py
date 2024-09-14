@@ -1,22 +1,23 @@
 from flask import Flask
-from db_config import Config, db
+from server.db_config import Config, db
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-from auth.models import User
-from posts.models import Post
+from server.auth.models import User
+from server.posts.models import Post
 
-from auth import auth_bp
+from server.auth import auth_bp
 app.register_blueprint(auth_bp)
 
-from images import images_bp
+from server.images import images_bp
 app.register_blueprint(images_bp)
 
-from posts import posts_bp
+from server.posts import posts_bp
 app.register_blueprint(posts_bp)
 
-with app.app_context:
+with app.app_context():
     db.create_all()
 
 
