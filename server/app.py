@@ -7,8 +7,12 @@ app.config.from_object(Config)
 
 db = SQLAlchemy(app)
 
+from auth import auth_bp
+app.register_blueprint(auth_bp)
+
 from posts import posts_bp
 app.register_blueprint(posts_bp)
+
 
 @app.route('/', methods=["GET"])
 def hello_world():
