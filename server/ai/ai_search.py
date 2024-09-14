@@ -95,14 +95,15 @@ def find_matching_listings(criteria: dict):
     # Start with all posts
     query = Post.query
 
-    # Apply filters based on criteria
+    # Dynamic filters applied based on criteria
     if criteria.get('price') is not None:
         query = query.filter(Post.price <= criteria['price'])
 
     if criteria.get('roommate_count') is not None:
         query = query.filter(Post.roommate_count == criteria['roommate_count'])
 
-    if criteria.get('gender_preferences') is not None:
+    # For lists like gender_preferences, use array or text-based search
+    if criteria.get('gender_preferences'):
         query = query.filter(Post.gender_preferences.contains(criteria['gender_preferences']))
 
     if criteria.get('walk_time') is not None:
@@ -129,34 +130,35 @@ def find_matching_listings(criteria: dict):
     if criteria.get('lease_length') is not None:
         query = query.filter(Post.lease_length == criteria['lease_length'])
 
-    if criteria.get('utilities_included') is not None:
+    # Ensure we handle lists such as utilities_included properly
+    if criteria.get('utilities_included'):
         query = query.filter(Post.utilities_included.contains(criteria['utilities_included']))
 
     if criteria.get('ada_accessible') is not None:
         query = query.filter(Post.ada_accessible == criteria['ada_accessible'])
 
-    if criteria.get('proximity_to_stores') is not None:
+    if criteria.get('proximity_to_stores'):
         query = query.filter(Post.proximity_to_stores.contains(criteria['proximity_to_stores']))
 
     if criteria.get('square_footage') is not None:
         query = query.filter(Post.square_footage >= criteria['square_footage'])
 
-    if criteria.get('present_pet_types') is not None:
+    if criteria.get('present_pet_types'):
         query = query.filter(Post.present_pet_types.contains(criteria['present_pet_types']))
 
-    if criteria.get('bus_routes') is not None:
+    if criteria.get('bus_routes'):
         query = query.filter(Post.bus_routes.contains(criteria['bus_routes']))
 
-    if criteria.get('nationalities') is not None:
+    if criteria.get('nationalities'):
         query = query.filter(Post.nationalities.contains(criteria['nationalities']))
 
     if criteria.get('deposit_required') is not None:
         query = query.filter(Post.deposit_required <= criteria['deposit_required'])
 
-    if criteria.get('lease_type') is not None:
+    if criteria.get('lease_type'):
         query = query.filter(Post.lease_type == criteria['lease_type'])
 
-    # Execute the query
+    # Execute the query to get posts
     posts = query.all()
 
     # Rank the posts based on the number of matching criteria
@@ -167,21 +169,20 @@ def find_matching_listings(criteria: dict):
 
 def rank_listings(posts, criteria):
     ranked_list = []
-    total_criteria = sum(1 for value in criteria.values() if value is not None)
+    total_criteria = sum(1 for value in criteria.values() if value is not None)  # Count the number of active criteria
 
     for post in posts:
         match_count = 0
 
-        # Check each criterion and increment match count
+        # Matching logic for each criterion
         if criteria.get('price') is not None and post.price <= criteria['price']:
             match_count += 1
 
         if criteria.get('roommate_count') is not None and post.roommate_count == criteria['roommate_count']:
             match_count += 1
 
-        if criteria.get('gender_preferences') is not None:
-            if set(criteria['gender_preferences']).intersection(set(post.gender_preferences or [])):
-                match_count += 1
+        if criteria.get('gender_preferences') and set(criteria['gender_preferences']).intersection(set(post.gender_preferences or [])):
+            match_count += 1
 
         if criteria.get('walk_time') is not None and post.walk_time <= criteria['walk_time']:
             match_count += 1
@@ -207,31 +208,26 @@ def rank_listings(posts, criteria):
         if criteria.get('lease_length') is not None and post.lease_length == criteria['lease_length']:
             match_count += 1
 
-        if criteria.get('utilities_included') is not None:
-            if set(criteria['utilities_included']).issubset(set(post.utilities_included or [])):
-                match_count += 1
+        if criteria.get('utilities_included') and set(criteria['utilities_included']).issubset(set(post.utilities_included or [])):
+            match_count += 1
 
         if criteria.get('ada_accessible') is not None and post.ada_accessible == criteria['ada_accessible']:
             match_count += 1
 
-        if criteria.get('proximity_to_stores') is not None:
-            if set(criteria['proximity_to_stores']).intersection(set(post.proximity_to_stores or [])):
-                match_count += 1
+        if criteria.get('proximity_to_stores') and set(criteria['proximity_to_stores']).intersection(set(post.proximity_to_stores or [])):
+            match_count += 1
 
         if criteria.get('square_footage') is not None and post.square_footage >= criteria['square_footage']:
             match_count += 1
 
-        if criteria.get('present_pet_types') is not None:
-            if set(criteria['present_pet_types']).intersection(set(post.present_pet_types or [])):
-                match_count += 1
+        if criteria.get('present_pet_types') and set(criteria['present_pet_types']).intersection(set(post.present_pet_types or [])):
+            match_count += 1
 
-        if criteria.get('bus_routes') is not None:
-            if set(criteria['bus_routes']).intersection(set(post.bus_routes or [])):
-                match_count += 1
+        if criteria.get('bus_routes') and set(criteria['bus_routes']).intersection(set(post.bus_routes or [])):
+            match_count += 1
 
-        if criteria.get('nationalities') is not None:
-            if set(criteria['nationalities']).intersection(set(post.nationalities or [])):
-                match_count += 1
+        if criteria.get('nationalities') and set(criteria['nationalities']).intersection(set(post.nationalities or [])):
+            match_count += 1
 
         if criteria.get('deposit_required') is not None and post.deposit_required <= criteria['deposit_required']:
             match_count += 1
@@ -240,8 +236,7 @@ def rank_listings(posts, criteria):
             match_count += 1
 
         # Calculate match score (percentage of criteria matched)
-        relevant_criteria_count = sum(1 for field in criteria if criteria[field] is not None)
-        match_score = match_count / relevant_criteria_count if relevant_criteria_count > 0 else 0
+        match_score = match_count / total_criteria if total_criteria > 0 else 0
         ranked_list.append((match_score, post))
 
     # Sort posts by match score in descending order
