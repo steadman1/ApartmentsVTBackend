@@ -8,11 +8,8 @@ from flask import current_app as app
 images_bp = Blueprint("images", __name__, url_prefix="/images")
 
 # Set the folder where uploaded images will be stored
-UPLOAD_FOLDER = 'image_uploads/'  # Your folder is called 'image_uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Configure the app to use this folder
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure file extension is allowed
 def allowed_file(filename):

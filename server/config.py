@@ -7,6 +7,8 @@ from flask_jwt_extended import JWTManager
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
+    UPLOAD_FOLDER = 'image_uploads/'
+
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'main.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # To suppress a warning
     
