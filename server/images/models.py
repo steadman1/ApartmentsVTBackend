@@ -1,4 +1,4 @@
-from ..db_config import db
+from server.db_config import db
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)

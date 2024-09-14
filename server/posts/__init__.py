@@ -8,4 +8,4 @@ posts_bp = Blueprint(
     static_folder="static"
 )
 
-from . import routes
+from server.posts import routes

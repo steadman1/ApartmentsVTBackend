@@ -1,1 +1,1 @@
-from . import posts_bp
+from server.posts import posts_bp

@@ -1,2 +1,2 @@
-from . import images_bp
+from server.images import images_bp
 

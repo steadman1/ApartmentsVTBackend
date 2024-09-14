@@ -1,6 +1,4 @@
-from ..db_config import db
-from datetime import datetime
-import uuid
+from server.db_config import db
 
 class User(db.Model):    
     id = db.Column(db.Integer, primary_key=True)
@@ -10,9 +8,9 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    phone_number = db.Colum(db.String(20), unique=True, nullable=False)
+    phone_number = db.Column(db.String(20), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    password_salt = db.Column(db.String(20, nullable=False))
+    password_salt = db.Column(db.String(20), nullable=False)
     
     # Additional user details
     bio = db.Column(db.Text, nullable=True)

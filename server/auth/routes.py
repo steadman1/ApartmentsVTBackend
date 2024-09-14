@@ -2,7 +2,7 @@ from . import auth_bp
 from ..db_config import db
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, gen_salt, check_password_hash
-from models import User
+from server.auth.models import User
 
 @auth_bp.route("/signup", methods=["POST"])
 def signup():

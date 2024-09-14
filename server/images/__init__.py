@@ -8,4 +8,4 @@ images_bp = Blueprint(
     static_folder="static"
 )
 
-from . import routes
+from server.images import routes
