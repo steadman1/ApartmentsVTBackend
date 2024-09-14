@@ -3,7 +3,7 @@ from server.config import db
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, gen_salt, check_password_hash
 from server.auth.models import User
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
@@ -61,3 +61,12 @@ def login():
           return jsonify(access_token=access_token, refresh_token=refresh_token), 200
      else:
           return jsonify({"error": "Invalid password"}), 401
+     
+@auth_bp.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+     user = get_jwt_identity()
+     access_token = create_access_token(identity=user)
+     refresh_token = create_refresh_token(identity=user)
+     return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+
