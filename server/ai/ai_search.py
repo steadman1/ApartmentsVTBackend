@@ -91,10 +91,8 @@ def ai_search(prompt: str):
         logger.error("An error occurred during AI search: %s", e)
         return []
 
-
 def find_matching_listings(criteria: dict):
     # Start with all posts
-   with app.app_context():
     query = Post.query
 
     # Apply filters based on criteria
@@ -157,8 +155,6 @@ def find_matching_listings(criteria: dict):
 
     if criteria.get('lease_type') is not None:
         query = query.filter(Post.lease_type == criteria['lease_type'])
-
-
 
     # Execute the query
     posts = query.all()
