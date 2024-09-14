@@ -13,13 +13,13 @@ def create_app():
     from server.posts.models import Post
     from server.images.models import Image
 
-    from server.auth.routes import auth_bp
+    from server.auth import auth_bp
     app.register_blueprint(auth_bp)
 
-    from server.posts.routes import posts_bp
+    from server.posts import posts_bp
     app.register_blueprint(posts_bp)
 
-    from server.images.routes import images_bp
+    from server.images import images_bp
     app.register_blueprint(images_bp)
 
     return app

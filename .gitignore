@@ -41,3 +41,7 @@ Thumbs.db
 #######################
 .vs/
 .env
+
+# Python Files #
+################
+*/__pycache__
