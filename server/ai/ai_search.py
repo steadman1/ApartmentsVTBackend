@@ -43,6 +43,7 @@ def ai_search(prompt: str):
                         "- bike_time (integer): Maximum minutes to campus by biking\n"
                         "- drive_time (integer): Maximum minutes to campus by driving\n"
                         "- pets_allowed (boolean)\n"
+                        "- present_pet_types (list of strings): e.g., ['dog', 'cat', etc.]\n"
                         "- furnished (boolean)\n"
                         "- bathroom_count (integer)\n"
                         "- bedroom_count (integer)\n"
@@ -50,6 +51,10 @@ def ai_search(prompt: str):
                         "- utilities_included (list of strings): e.g., ['water', 'electricity', 'internet']\n"
                         "- ada_accessible (boolean)\n"
                         "- proximity_to_stores (list of strings)\n"
+                        "- bus_routes (list of strings)\n"
+                        "- nationalities (list of strings)\n"
+                        "- deposit_required (integer)\n"
+                        "- lease_type (string): e.g., 'Sublease', 'Full Lease'\n"
                         "- square_footage (integer): Minimum square footage\n"
                     ),
                 },
@@ -72,9 +77,11 @@ def ai_search(prompt: str):
         # Ensure all expected fields are present
         expected_fields = [
             'price', 'roommate_count', 'gender_preferences', 'walk_time', 'bike_time', 'drive_time', 'pets_allowed',
-            'furnished', 'bathroom_count', 'bedroom_count', 'lease_length', 'utilities_included', 'ada_accessible',
-            'proximity_to_stores', 'square_footage'
+            'present_pet_types', 'furnished', 'bathroom_count', 'bedroom_count', 'lease_length', 'utilities_included', 
+            'ada_accessible', 'proximity_to_stores', 'bus_routes', 'nationalities', 'deposit_required', 'lease_type', 
+            'square_footage'
         ]
+
         for field in expected_fields:
             if field not in criteria:
                 criteria[field] = None
@@ -135,6 +142,23 @@ def find_matching_listings(criteria: dict):
 
     if criteria.get('square_footage') is not None:
         query = query.filter(Post.square_footage >= criteria['square_footage'])
+
+    if criteria.get('present_pet_types') is not None:
+        query = query.filter(Post.present_pet_types.contains(criteria['present_pet_types']))
+
+    if criteria.get('bus_routes') is not None:
+        query = query.filter(Post.bus_routes.contains(criteria['bus_routes']))
+
+    if criteria.get('nationalities') is not None:
+        query = query.filter(Post.nationalities.contains(criteria['nationalities']))
+
+    if criteria.get('deposit_required') is not None:
+        query = query.filter(Post.deposit_required <= criteria['deposit_required'])
+
+    if criteria.get('lease_type') is not None:
+        query = query.filter(Post.lease_type == criteria['lease_type'])
+
+
 
     # Execute the query
     posts = query.all()
@@ -201,8 +225,27 @@ def rank_listings(posts, criteria):
         if criteria.get('square_footage') is not None and post.square_footage >= criteria['square_footage']:
             match_count += 1
 
+        if criteria.get('present_pet_types') is not None:
+            if set(criteria['present_pet_types']).intersection(set(post.present_pet_types or [])):
+                match_count += 1
+
+        if criteria.get('bus_routes') is not None:
+            if set(criteria['bus_routes']).intersection(set(post.bus_routes or [])):
+                match_count += 1
+
+        if criteria.get('nationalities') is not None:
+            if set(criteria['nationalities']).intersection(set(post.nationalities or [])):
+                match_count += 1
+
+        if criteria.get('deposit_required') is not None and post.deposit_required <= criteria['deposit_required']:
+            match_count += 1
+
+        if criteria.get('lease_type') is not None and post.lease_type == criteria['lease_type']:
+            match_count += 1
+
         # Calculate match score (percentage of criteria matched)
-        match_score = match_count / total_criteria if total_criteria > 0 else 0
+        relevant_criteria_count = sum(1 for field in criteria if criteria[field] is not None)
+        match_score = match_count / relevant_criteria_count if relevant_criteria_count > 0 else 0
         ranked_list.append((match_score, post))
 
     # Sort posts by match score in descending order
