@@ -1,8 +1,9 @@
 from server.auth import auth_bp
-from server.db_config import db
+from server.config import db
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, gen_salt, check_password_hash
 from server.auth.models import User
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
@@ -42,6 +43,7 @@ def signup():
 @auth_bp.route("/login", methods=["POST"])
 def login():
      data = request.get_json()
+     print(data)
      if not 'email' in data or not 'password' in data:
           return jsonify({"error": "Missing required fields"}), 400
      
@@ -54,4 +56,17 @@ def login():
      password = data['password'] + user.password_salt
 
      if check_password_hash(user.password_hash, password):
-          pass
+          access_token=create_access_token(identity=user.id)
+          refresh_token=create_refresh_token(identity=user.id)
+          return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+     else:
+          return jsonify({"error": "Invalid password"}), 401
+     
+@auth_bp.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+     user = get_jwt_identity()
+     access_token = create_access_token(identity=user)
+     refresh_token = create_refresh_token(identity=user)
+     return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+
