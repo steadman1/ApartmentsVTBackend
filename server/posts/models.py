@@ -55,6 +55,21 @@ class Post(db.Model):
     
     # Relationship to images
     images = db.relationship('Image', backref='post')
+
+    # Additional details
+    apartment_complex_name = db.Column(db.String(255))
+    period = db.Column(db.String(50))
+    property_type = db.Column(db.String(100))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    
+    # Additional preferences and attributes
+    smoking_allowed = db.Column(db.Boolean, default=False)
+    parking_available = db.Column(db.Boolean, default=False)
+    
+    # Images URLs
+    images_urls = db.Column(db.JSON)  # Stores a list of URLs as JSON
+
     
     def __repr__(self):
         return f'<Post {self.title}>'
