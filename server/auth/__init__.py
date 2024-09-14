@@ -7,3 +7,5 @@ auth_bp = Blueprint(
     template_folder="templates",
     static_folder="static"
 )
+
+from server.auth import routes

@@ -1,64 +1,59 @@
+from server.images import images_bp
 import os
-from flask import Blueprint, request, redirect, url_for, flash, send_from_directory
-from werkzeug.utils import secure_filename
-from server import db
+from flask import request, jsonify, send_file, current_app
+from server.config import db
 from server.images.models import Image
-from flask import current_app as app
-
-images_bp = Blueprint("images", __name__, url_prefix="/images")
+from server.posts.models import Post
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 # Set the folder where uploaded images will be stored
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-
-# Ensure file extension is allowed
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 @images_bp.route('/upload', methods=['POST'])
+@jwt_required()
 def upload_image():
+    # data = request.get_json()
+    user_id = get_jwt_identity()
+    image_id = Image.query.count() + 1
+
     # Check if the post request has the file part
     if 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
+        return jsonify({"error": "No file part in the request"}), 400
     
     file = request.files['file']
 
     # If no file is selected
     if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
+        return jsonify({"error": "No file selected for uploading"}), 400
 
-    if file and allowed_file(file.filename):
-        # Secure the filename and save it
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    extension = file.filename.rsplit('.', 1)[1].lower()
+
+    if file and extension in ALLOWED_EXTENSIONS:
+        filename = str(image_id) + f".{extension}"
+        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
 
-        # Get user_id and post_id from the form data
-        user_id = request.form.get('user_id')  # Assumes user ID is sent with request
-        post_id = request.form.get('post_id')  # Optional
+        # if 'post_id' in data:
+        #     post_id = data['post_id']
+        #     post = Post.query.get(post_id)
 
         # Create a new Image object and store in the database
         image = Image(
-            post_id=post_id,
             user_id=user_id,
-            url=f'/images/uploads/{filename}',  # The URL for the uploaded image
+            url=f'/images/get/{filename}',  # The URL for the uploaded image
             location=file_path  # The location of the file on the server
         )
 
         db.session.add(image)
         db.session.commit()
 
-        flash('Image successfully uploaded and associated with post!')
-        return redirect(url_for('images.upload_image'))  # Redirect to a success page
+        return jsonify(msg='Image successfully uploaded and associated with post!'), 200
 
-    flash('Invalid file type')
-    return redirect(request.url)
+    return jsonify(msg="Invalid file type"), 400
 
 # Route to serve uploaded files
-@images_bp.route('/uploads/<filename>')
+@images_bp.route('/get/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    extension = filename.rsplit('.', 1)[1].lower()
+    return send_file(os.path.join(current_app.config['UPLOAD_FOLDER'], filename), mimetype=f'image/{extension}')
 
