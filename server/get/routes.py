@@ -4,26 +4,26 @@ from server.auth.models import User
 from server.posts.models import Post
 from flask import jsonify
 
-@get_bp.route('/grocery')
-def grocery():
-    stores = Post.query.filter(Post.proximity_locations.any('grocery store')).all()
-    return jsonify([post.serialize() for post in stores])
+# @get_bp.route('/grocery')
+# def grocery():
+#     stores = Post.query.filter(Post.proximity_locations.any('grocery store')).all()
+#     return jsonify([post.serialize() for post in stores])
 
-@get_bp.route('/nearby')
-def nearby():
-    near = Post.query.filter_by(Post.milesToCampus <= 3).all()
-    return jsonify(near)
+# @get_bp.route('/nearby')
+# def nearby():
+#     near = Post.query.filter_by(Post.milesToCampus <= 3).all()
+#     return jsonify(near)
 
 
-@get_bp.route('/pets')
-def pets():
-    pets_list = Post.query.filter_by(Post.present_pet_types==[]).all()
-    return jsonify(pets_list)
+# @get_bp.route('/pets')
+# def pets():
+#     pets_list = Post.query.filter_by(Post.present_pet_types==[]).all()
+#     return jsonify(pets_list)
 
-@get_bp.route('/routes')
-def has_bus_routes():
-    has_bus = Post.query.filter_by(Post.bus_routes_count >= 0).all()
-    return jsonify(has_bus)
+# @get_bp.route('/routes')
+# def has_bus_routes():
+#     has_bus = Post.query.filter_by(Post.bus_routes_count >= 0).all()
+#     return jsonify(has_bus)
 
 @get_bp.route("/get_all")
 def get_all():
