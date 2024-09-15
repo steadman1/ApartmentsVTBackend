@@ -32,7 +32,7 @@ def search_with_criteria():
         "lease_length": data.get('lease_length') if 'lease_length' in data else None,  # String
         "utilities_included": data.get('utilities_included') if 'utilities_included' in data else None,  # Array of strings
         "proximity_to_stores": data.get('proximity_to_stores') if 'proximity_to_stores' in data else None,  # Array of strings
-        "bus_routes": data.get('bus_routes') if 'bus_routes' in data else None,  # Array of strings
+        "bus_routes_count": int(data.get('bus_routes_count')) if 'bus_routes_count' in data else None,  
         "nationalities": data.get('nationalities') if 'nationalities' in data else None,  # Array of strings
         "deposit_required": int(data.get('deposit_required')) if 'deposit_required' in data else None,  # Integer
         "lease_type": data.get('lease_type') if 'lease_type' in data else None,  # String
@@ -73,7 +73,7 @@ def create_post():
             walk_time=data.get('walk_time'),
             bike_time=data.get('bike_time'),
             drive_time=data.get('drive_time'),
-            bus_routes=data.get('bus_routes', []),
+            bus_routes_count=data.get('bus_routes_count'),
             gender_preferences=data.get('gender_preferences', []),
             nationalities=data.get('nationalities', []),
             ada_accessible=data.get('ada_accessible'),

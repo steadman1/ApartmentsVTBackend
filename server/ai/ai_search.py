@@ -51,7 +51,7 @@ def ai_search(prompt: str):
                         "- utilities_included (list of strings): e.g., ['water', 'electricity', 'internet']\n"
                         "- ada_accessible (boolean)\n"
                         "- proximity_to_stores (list of strings)\n"
-                        "- bus_routes (list of strings)\n"
+                        "- bus_routes_count (integer)\n"
                         "- nationalities (list of strings)\n"
                         "- deposit_required (integer)\n"
                         "- lease_type (string): e.g., 'Sublease', 'Full Lease'\n"
@@ -84,7 +84,7 @@ def ai_search(prompt: str):
         expected_fields = [
             'price', 'roommate_count', 'gender_preferences', 'walk_time', 'bike_time', 'drive_time', 'pets_allowed',
             'present_pet_types', 'furnished', 'bathroom_count', 'bedroom_count', 'lease_length', 'utilities_included', 
-            'ada_accessible', 'proximity_to_stores', 'bus_routes', 'nationalities', 'deposit_required', 'lease_type', 
+            'ada_accessible', 'proximity_to_stores', 'bus_routes_count', 'nationalities', 'deposit_required', 'lease_type', 
             'square_footage', 'period', 'apartment_complex_name', 'property_type', 'smoking_allowed', 'parking_available', 
             'miles_to_campus'
         ]
@@ -178,7 +178,7 @@ def rank_listings(posts, criteria):
         if criteria.get('present_pet_types') and set(criteria['present_pet_types']).intersection(set(post.present_pet_types or [])):
             match_count += 1
 
-        if criteria.get('bus_routes') and set(criteria['bus_routes']).intersection(set(post.bus_routes or [])):
+        if criteria.get('bus_routes_count') and set(criteria['bus_routes_count']).intersection(set(post.bus_routes_count or [])):
             match_count += 1
 
         if criteria.get('nationalities') and set(criteria['nationalities']).intersection(set(post.nationalities or [])):

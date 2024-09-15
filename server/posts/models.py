@@ -25,7 +25,7 @@ class Post(db.Model):
     drive_time = db.Column(db.Integer)  # Minutes to campus by driving
     
     # Bus routes (array of strings)
-    bus_routes = db.Column(db.JSON)
+    bus_routes_count = db.Column(db.Integer)
     
     # Preferences and attributes
     gender_preferences = db.Column(db.JSON)  # Array of strings (optional)
@@ -88,7 +88,7 @@ class Post(db.Model):
             'walk_time': self.walk_time,
             'bike_time': self.bike_time,
             'drive_time': self.drive_time,
-            'bus_routes': self.bus_routes,
+            'bus_routes_count': self.bus_routes_count,
             'gender_preferences': self.gender_preferences,
             'nationalities': self.nationalities,
             'ada_accessible': self.ada_accessible,
