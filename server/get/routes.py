@@ -11,7 +11,7 @@ from flask import jsonify
 
 @get_bp.route('/nearby')
 def nearby():
-    near = Post.query.filter_by(Post.milesToCampus <= 3).all()
+    near = Post.query.filter(Post.milesToCampus <= 3).all()
     return jsonify([post.to_dict() for post in near])
 
 # @get_bp.route('/pets')
