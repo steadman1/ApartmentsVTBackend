@@ -24,6 +24,8 @@ openai.api_version = "2023-06-01-preview"
 # Define the deployment name (your deployment name in Azure)
 deployment_name = os.getenv("OPENAI_DEPLOYMENT_NAME")  
 
+print(deployment_name)
+
 def ai_search(prompt: str):
     try:
         response = openai.ChatCompletion.create(
@@ -62,6 +64,7 @@ def ai_search(prompt: str):
                         "- smoking_allowed (boolean)\n"
                         "- parking_available (boolean)\n"
                         "- miles_to_campus (float): Distance in miles from campus\n"
+                        "- url_to_listing (string):\n"
                     ),
                 },
                 {"role": "user", "content": prompt},
@@ -86,7 +89,7 @@ def ai_search(prompt: str):
             'present_pet_types', 'furnished', 'bathroom_count', 'bedroom_count', 'lease_length', 'utilities_included', 
             'ada_accessible', 'proximity_to_stores', 'bus_routes_count', 'nationalities', 'deposit_required', 'lease_type', 
             'square_footage', 'period', 'apartment_complex_name', 'property_type', 'smoking_allowed', 'parking_available', 
-            'miles_to_campus'
+            'miles_to_campus', 'url_to_listing'
         ]
 
         for field in expected_fields:
