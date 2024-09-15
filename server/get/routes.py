@@ -4,10 +4,10 @@ from server.auth.models import User
 from server.posts.models import Post
 from flask import jsonify
 
-# @get_bp.route('/grocery')
-# def grocery():
-#     stores = Post.query.filter(Post.proximity_locations.any('grocery store')).all()
-#     return jsonify([post.serialize() for post in stores])
+@get_bp.route('/grocery')
+def grocery():
+    stores = Post.query.filter(Post.proximity_locations.any('grocery store')).all()
+    return jsonify([post.to_dict() for post in stores])
 
 @get_bp.route('/nearby')
 def nearby():
