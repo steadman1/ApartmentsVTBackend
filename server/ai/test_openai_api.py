@@ -7,7 +7,7 @@ load_dotenv()
 
 # Set up OpenAI client with Azure's API
 openai.api_type = "azure"
-openai.api_base = os.getenv("OPENAI_API_BASE")  # e.g., 'https://vthacks24.openai.azure.com'
+openai.api_base = os.getenv("OPENAI_API_BASE")  
 openai.api_version = "2023-06-01-preview"       # Update to the correct API version if needed
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

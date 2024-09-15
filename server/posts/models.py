@@ -70,6 +70,9 @@ class Post(db.Model):
     # Images URLs
     images_urls = db.Column(db.JSON)  # Stores a list of URLs as JSON
 
+    favoriteListing = db.Column(db.Boolean)
+    milesToCampus = db.Column(db.Float)
+
     
     def __repr__(self):
         return f'<Post {self.title}>'
