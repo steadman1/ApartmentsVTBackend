@@ -14,15 +14,15 @@ def nearby():
     near = Post.query.filter(Post.milesToCampus <= 3).all()
     return jsonify([post.to_dict() for post in near])
 
-# @get_bp.route('/pets')
-# def pets():
-#     pets_list = Post.query.filter_by(Post.present_pet_types==[]).all()
-#     return jsonify(pets_list)
+@get_bp.route('/pets')
+def pets():
+    pets_list = Post.query.filter(Post.present_pet_types==[]).all()
+    return jsonify([post.to_dict() for post in pets_list])
 
-# @get_bp.route('/routes')
-# def has_bus_routes():
-#     has_bus = Post.query.filter_by(Post.bus_routes_count >= 0).all()
-#     return jsonify(has_bus)
+@get_bp.route('/routes')
+def has_bus_routes():
+    has_bus = Post.query.filter(Post.bus_routes_count >= 0).all()
+    return jsonify([post.to_dict() for post in has_bus])
 
 @get_bp.route("/get_all")
 def get_all():
