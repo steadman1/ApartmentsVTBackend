@@ -65,6 +65,7 @@ def ai_search(prompt: str):
                         "- parking_available (boolean)\n"
                         "- miles_to_campus (float): Distance in miles from campus\n"
                         "- url_to_listing (string):\n"
+                        "- languages (list of strings): e.g., 'English', 'Chinese'\n"
                     ),
                 },
                 {"role": "user", "content": prompt},
@@ -89,7 +90,7 @@ def ai_search(prompt: str):
             'present_pet_types', 'furnished', 'bathroom_count', 'bedroom_count', 'lease_length', 'utilities_included', 
             'ada_accessible', 'proximity_to_stores', 'bus_routes_count', 'nationalities', 'deposit_required', 'lease_type', 
             'square_footage', 'period', 'apartment_complex_name', 'property_type', 'smoking_allowed', 'parking_available', 
-            'miles_to_campus', 'url_to_listing'
+            'miles_to_campus', 'url_to_listing', 'languages'
         ]
 
         for field in expected_fields:
@@ -209,6 +210,9 @@ def rank_listings(posts, criteria):
             match_count += 1
 
         if criteria.get('miles_to_campus') is not None and post.miles_to_campus <= criteria['miles_to_campus']:
+            match_count += 1
+
+        if criteria.get('languages') and set(criteria['languages']).intersection(set(post.nationalities or [])):
             match_count += 1
 
         # Calculate match score (percentage of criteria matched)
