@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 # Set up OpenAI client with Azure's API
 openai.api_type = "azure"
-openai.api_key = "020154be1a2a4deb8049cfbbf4feeffc"
+openai.api_key = ""
 openai.api_base = "https://vthacks-ai-search.openai.azure.com/"
 openai.api_version = "2023-06-01-preview"      
 
