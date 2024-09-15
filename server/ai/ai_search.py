@@ -100,95 +100,10 @@ def ai_search(prompt: str):
 
 def find_matching_listings(criteria: dict):
     # Start with all posts
-    query = Post.query
-
-    # Dynamic filters applied based on criteria
-    if criteria.get('price') is not None:
-        query = query.filter(Post.price <= criteria['price'])
-
-    if criteria.get('roommate_count') is not None:
-        query = query.filter(Post.roommate_count == criteria['roommate_count'])
-
-    # For lists like gender_preferences, use array or text-based search
-    if criteria.get('gender_preferences'):
-        query = query.filter(Post.gender_preferences.contains(criteria['gender_preferences']))
-
-    if criteria.get('walk_time') is not None:
-        query = query.filter(Post.walk_time <= criteria['walk_time'])
-
-    if criteria.get('bike_time') is not None:
-        query = query.filter(Post.bike_time <= criteria['bike_time'])
-
-    if criteria.get('drive_time') is not None:
-        query = query.filter(Post.drive_time <= criteria['drive_time'])
-
-    if criteria.get('pets_allowed') is not None:
-        query = query.filter(Post.pets_allowed == criteria['pets_allowed'])
-
-    if criteria.get('furnished') is not None:
-        query = query.filter(Post.furnished == criteria['furnished'])
-
-    if criteria.get('bathroom_count') is not None:
-        query = query.filter(Post.bathroom_count >= criteria['bathroom_count'])
-
-    if criteria.get('bedroom_count') is not None:
-        query = query.filter(Post.bedroom_count >= criteria['bedroom_count'])
-
-    if criteria.get('lease_length') is not None:
-        query = query.filter(Post.lease_length == criteria['lease_length'])
-
-    # Ensure we handle lists such as utilities_included properly
-    if criteria.get('utilities_included'):
-        query = query.filter(Post.utilities_included.contains(criteria['utilities_included']))
-
-    if criteria.get('ada_accessible') is not None:
-        query = query.filter(Post.ada_accessible == criteria['ada_accessible'])
-
-    if criteria.get('proximity_to_stores'):
-        query = query.filter(Post.proximity_to_stores.contains(criteria['proximity_to_stores']))
-
-    if criteria.get('square_footage') is not None:
-        query = query.filter(Post.square_footage >= criteria['square_footage'])
-
-    if criteria.get('present_pet_types'):
-        query = query.filter(Post.present_pet_types.contains(criteria['present_pet_types']))
-
-    if criteria.get('bus_routes'):
-        query = query.filter(Post.bus_routes.contains(criteria['bus_routes']))
-
-    if criteria.get('nationalities'):
-        query = query.filter(Post.nationalities.contains(criteria['nationalities']))
-
-    if criteria.get('deposit_required') is not None:
-        query = query.filter(Post.deposit_required <= criteria['deposit_required'])
-
-    if criteria.get('lease_type'):
-        query = query.filter(Post.lease_type == criteria['lease_type'])
-
-    # Now add the new fields
-    if criteria.get('period'):
-        query = query.filter(Post.period == criteria['period'])
-
-    if criteria.get('apartment_complex_name'):
-        query = query.filter(Post.apartment_complex_name == criteria['apartment_complex_name'])
-
-    if criteria.get('property_type'):
-        query = query.filter(Post.property_type == criteria['property_type'])
-
-    if criteria.get('smoking_allowed') is not None:
-        query = query.filter(Post.smoking_allowed == criteria['smoking_allowed'])
-
-    if criteria.get('parking_available') is not None:
-        query = query.filter(Post.parking_available == criteria['parking_available'])
-
-    if criteria.get('miles_to_campus') is not None:
-        query = query.filter(Post.miles_to_campus <= criteria['miles_to_campus'])
-
-    # Execute the query to get posts
-    posts = query.all()
+    query = Post.query.all()  # Retrieve all posts instead of filtering
 
     # Rank the posts based on the number of matching criteria
-    ranked_posts = rank_listings(posts, criteria)
+    ranked_posts = rank_listings(query, criteria)
 
     # Convert posts to dictionaries for JSON serialization
     return [post.to_dict() for post in ranked_posts]
