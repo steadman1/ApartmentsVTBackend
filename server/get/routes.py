@@ -4,17 +4,15 @@ from server.auth.models import User
 from server.posts.models import Post
 from flask import jsonify
 
-nearby <= 3 miles
-near grocery stores
-nationality
-pets
+@get_bp.route('/grocery')
+def grocery():
+    stores = Post.query.filter(Post.proximity_locations.any('grocery store')).all()
+    return jsonify([post.serialize() for post in stores])
 
-
-
-@get_bp.route('nats/<nationality>')
-def nationalities():
-    nats = Post.query.filter_by(Post.nationalities.any(nationality))
-    
+@get_bp.route('/nearby')
+def nearby():
+    near = Post.query.filter_by(Post.milesToCampus <= 3).all()
+    return jsonify(near)
 
 
 @get_bp.route('/pets')
