@@ -43,7 +43,6 @@ def signup():
 @auth_bp.route("/login", methods=["POST"])
 def login():
      data = request.get_json()
-     print(data)
      if not 'email' in data or not 'password' in data:
           return jsonify({"error": "Missing required fields"}), 400
      

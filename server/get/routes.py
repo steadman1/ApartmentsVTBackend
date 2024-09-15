@@ -20,7 +20,7 @@ def get_user():
             "nationality": user.nationality,
             "profilePictureURL": user.profile_picture,
             "userListings": user.posts,
-            # "favoriteListings": [favorite_listing]
+            "favoriteListings": Post.query.filter_by(user_id=user.id, favoriteListing=True).all()
         }
         return jsonify(user_data)
     else:
@@ -41,7 +41,7 @@ def get_user_by_id(id):
             "nationality": user.nationality,
             "profilePictureURL": user.profile_picture,
             "userListings": user.posts,
-            # "favoriteListings": [favorite_listing]
+            "favoriteListings": Post.query.filter_by(user_id=user.id, favoriteListing=True).all()
         }
         return jsonify(user_data)
     else:
