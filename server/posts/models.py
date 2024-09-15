@@ -113,7 +113,8 @@ class Post(db.Model):
             'parking_available': self.parking_available,
             'images_urls': self.images_urls,
             'favoriteListing': self.favoriteListing,
-            'milesToCampus': self.milesToCampus
+            'milesToCampus': self.milesToCampus,
+            'url_to_listing': self.url_to_listing
         }
 
     
