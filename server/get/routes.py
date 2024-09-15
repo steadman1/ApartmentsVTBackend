@@ -9,11 +9,10 @@ from flask import jsonify
 #     stores = Post.query.filter(Post.proximity_locations.any('grocery store')).all()
 #     return jsonify([post.serialize() for post in stores])
 
-# @get_bp.route('/nearby')
-# def nearby():
-#     near = Post.query.filter_by(Post.milesToCampus <= 3).all()
-#     return jsonify(near)
-
+@get_bp.route('/nearby')
+def nearby():
+    near = Post.query.filter_by(Post.milesToCampus <= 3).all()
+    return jsonify([post.to_dict() for post in near])
 
 # @get_bp.route('/pets')
 # def pets():
