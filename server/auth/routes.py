@@ -38,7 +38,7 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    return 200
+    return jsonify({"success":"Signed up successfully"}), 200
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
