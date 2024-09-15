@@ -98,7 +98,8 @@ def create_post():
             latitude=data.get('latitude'),
             longitude=data.get('longitude'),
             favoriteListing=data.get('favoriteListing', False),
-            milesToCampus=data.get('milesToCampus')
+            milesToCampus=data.get('milesToCampus'),
+            url_to_listing=f"{request.host_url}posts/{Post.query.count()+1}"
         )
 
         # Add the new post to the database session
