@@ -26,6 +26,27 @@ def get_user():
     else:
         return jsonify({"error":"User not found"}), 404
     
+@get_bp.route('/user/<id>')
+def get_user_by_id(id):
+    user = User.query.get(id)
+    if user:
+        user_data = {
+            "id": user.id,
+            "username": user.username,
+            "firstName": user.first_name,
+            "lastName": user.last_name,
+            "email": user.email,
+            "phoneNumber": user.phone_number,
+            "bio": user.bio,
+            "nationality": user.nationality,
+            "profilePictureURL": user.profile_picture,
+            "userListings": user.posts,
+            # "favoriteListings": [favorite_listing]
+        }
+        return jsonify(user_data)
+    else:
+        return jsonify({"error":"User not found"}), 404
+    
 @get_bp.route('/posts/<id>')
 def get_post(id):
     post = Post.query.get(id)
@@ -44,33 +65,33 @@ def get_post(id):
             "propertyType": post.property_type,
             "latitude": post.latitude,
             "longitude": post.longitude,
-            "milesToCampus": 2.0,
-            "walkTime": 15,
-            "bikeTime": 8,
+            "milesToCampus": post.milesToCampus,
+            "walkTime": post.walk_time,
+            "bikeTime": post.bike_time,
             "busRoutesCount": 3,
-            "driveTime": 5,
-            "gender": ["Male"],
-            "nationality": ["American"],
-            "adaAccessible": True,
-            "proximityToStores": ["Walmart", "Starbucks", "McDonald's"],
-            "rentPeriodStart": "2023-09-14T00:00:00Z",  # ISO 8601 formatted date
-            "rentPeriodEnd": "2024-09-14T00:00:00Z",
-            "leaseLength": "12 months",
-            "utilitiesIncluded": ["Water", "Electricity", "Internet"],
-            "furnished": True,
-            "squareFootage": 1200,
-            "bathroomCount": 2,
-            "bedroomCount": 2,
-            "petsAllowed": True,
-            "postPublishedDate": "2023-09-14T00:00:00Z",
-            "depositRequired": 500,
-            "leaseType": "Full Lease",
-            "imagesURLs": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
-            "urlToListing": "https://example.com/listings/apartment1",
-            "smokingAllowed": False,
-            "parkingAvailable": True,
-            "customFields": {
-                "Pool": "Yes",
-                "Gym": "Yes"
-            }
+            "driveTime": post.drive_time,
+            "gender": post.gender_preferences,
+            "nationality": post.nationalities,
+            "adaAccessible": post.ada_accessible,
+            "proximityToStores": post.proximity_to_stores,
+            "rentPeriodStart": post.rent_period_start.isoformat(),  # ISO 8601 formatted date
+            "rentPeriodEnd": post.rent_period_end.isoformat(),
+            "leaseLength": post.lease_length,
+            "utilitiesIncluded": post.utilities_included,
+            "furnished": post.furnished,
+            "squareFootage": post.square_footage,
+            "bathroomCount": post.bathroom_count,
+            "bedroomCount": post.bedroom_count,
+            "petsAllowed": post.pets_allowed,
+            "postPublishedDate": post.post_published_date.isoformat(),
+            "depositRequired": post.deposit_required,
+            "leaseType": post.lease_type,
+            "imagesURLs": post.images_urls,
+            "urlToListing": post.url_to_listing,
+            "smokingAllowed": post.smoking_allowed,
+            "parkingAvailable": post.parking_available,
+            "customFields": post.custom_fields
         }
+        return jsonify(listing_data)
+    else:
+        return jsonify({"error":"Listing not found"}), 404
