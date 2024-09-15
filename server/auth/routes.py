@@ -66,4 +66,5 @@ def login():
 def refresh():
      user_id = get_jwt_identity()
      access_token = create_access_token(identity=user_id)
-     return jsonify(access_token=access_token), 200
+     refresh_token = create_refresh_token(identity=user_id)
+     return jsonify(access_token=access_token, refresh_token=refresh_token), 200
