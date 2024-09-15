@@ -68,7 +68,7 @@ def get_post(id):
             "milesToCampus": post.milesToCampus,
             "walkTime": post.walk_time,
             "bikeTime": post.bike_time,
-            "busRoutesCount": 3,
+            "busRoutesCount": post.bus_routes_count,
             "driveTime": post.drive_time,
             "gender": post.gender_preferences,
             "nationality": post.nationalities,
