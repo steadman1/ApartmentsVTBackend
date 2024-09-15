@@ -56,6 +56,12 @@ def ai_search(prompt: str):
                         "- deposit_required (integer)\n"
                         "- lease_type (string): e.g., 'Sublease', 'Full Lease'\n"
                         "- square_footage (integer): Minimum square footage\n"
+                        "- period (string): Lease period, e.g., 'Summer', 'Fall'\n"
+                        "- apartment_complex_name (string)\n"
+                        "- property_type (string): e.g., 'Apartment', 'House'\n"
+                        "- smoking_allowed (boolean)\n"
+                        "- parking_available (boolean)\n"
+                        "- miles_to_campus (float): Distance in miles from campus\n"
                     ),
                 },
                 {"role": "user", "content": prompt},
@@ -79,7 +85,8 @@ def ai_search(prompt: str):
             'price', 'roommate_count', 'gender_preferences', 'walk_time', 'bike_time', 'drive_time', 'pets_allowed',
             'present_pet_types', 'furnished', 'bathroom_count', 'bedroom_count', 'lease_length', 'utilities_included', 
             'ada_accessible', 'proximity_to_stores', 'bus_routes', 'nationalities', 'deposit_required', 'lease_type', 
-            'square_footage'
+            'square_footage', 'period', 'apartment_complex_name', 'property_type', 'smoking_allowed', 'parking_available', 
+            'miles_to_campus'
         ]
 
         for field in expected_fields:
@@ -93,76 +100,10 @@ def ai_search(prompt: str):
 
 def find_matching_listings(criteria: dict):
     # Start with all posts
-    query = Post.query
-
-    # Dynamic filters applied based on criteria
-    if criteria.get('price') is not None:
-        query = query.filter(Post.price <= criteria['price'])
-
-    if criteria.get('roommate_count') is not None:
-        query = query.filter(Post.roommate_count == criteria['roommate_count'])
-
-    # For lists like gender_preferences, use array or text-based search
-    if criteria.get('gender_preferences'):
-        query = query.filter(Post.gender_preferences.contains(criteria['gender_preferences']))
-
-    if criteria.get('walk_time') is not None:
-        query = query.filter(Post.walk_time <= criteria['walk_time'])
-
-    if criteria.get('bike_time') is not None:
-        query = query.filter(Post.bike_time <= criteria['bike_time'])
-
-    if criteria.get('drive_time') is not None:
-        query = query.filter(Post.drive_time <= criteria['drive_time'])
-
-    if criteria.get('pets_allowed') is not None:
-        query = query.filter(Post.pets_allowed == criteria['pets_allowed'])
-
-    if criteria.get('furnished') is not None:
-        query = query.filter(Post.furnished == criteria['furnished'])
-
-    if criteria.get('bathroom_count') is not None:
-        query = query.filter(Post.bathroom_count >= criteria['bathroom_count'])
-
-    if criteria.get('bedroom_count') is not None:
-        query = query.filter(Post.bedroom_count >= criteria['bedroom_count'])
-
-    if criteria.get('lease_length') is not None:
-        query = query.filter(Post.lease_length == criteria['lease_length'])
-
-    # Ensure we handle lists such as utilities_included properly
-    if criteria.get('utilities_included'):
-        query = query.filter(Post.utilities_included.contains(criteria['utilities_included']))
-
-    if criteria.get('ada_accessible') is not None:
-        query = query.filter(Post.ada_accessible == criteria['ada_accessible'])
-
-    if criteria.get('proximity_to_stores'):
-        query = query.filter(Post.proximity_to_stores.contains(criteria['proximity_to_stores']))
-
-    if criteria.get('square_footage') is not None:
-        query = query.filter(Post.square_footage >= criteria['square_footage'])
-
-    if criteria.get('present_pet_types'):
-        query = query.filter(Post.present_pet_types.contains(criteria['present_pet_types']))
-
-    if criteria.get('bus_routes'):
-        query = query.filter(Post.bus_routes.contains(criteria['bus_routes']))
-
-    if criteria.get('nationalities'):
-        query = query.filter(Post.nationalities.contains(criteria['nationalities']))
-
-    if criteria.get('deposit_required') is not None:
-        query = query.filter(Post.deposit_required <= criteria['deposit_required'])
-
-    if criteria.get('lease_type'):
-        query = query.filter(Post.lease_type == criteria['lease_type'])
-
-    # Execute the query to get posts
-    posts = query.all()
+    query = Post.query.all()  # Retrieve all posts instead of filtering
 
     # Rank the posts based on the number of matching criteria
-    ranked_posts = rank_listings(posts, criteria)
+    ranked_posts = rank_listings(query, criteria)
 
     # Convert posts to dictionaries for JSON serialization
     return [post.to_dict() for post in ranked_posts]
@@ -233,6 +174,25 @@ def rank_listings(posts, criteria):
             match_count += 1
 
         if criteria.get('lease_type') is not None and post.lease_type == criteria['lease_type']:
+            match_count += 1
+
+        # New fields
+        if criteria.get('period') is not None and post.period == criteria['period']:
+            match_count += 1
+
+        if criteria.get('apartment_complex_name') is not None and post.apartment_complex_name == criteria['apartment_complex_name']:
+            match_count += 1
+
+        if criteria.get('property_type') is not None and post.property_type == criteria['property_type']:
+            match_count += 1
+
+        if criteria.get('smoking_allowed') is not None and post.smoking_allowed == criteria['smoking_allowed']:
+            match_count += 1
+
+        if criteria.get('parking_available') is not None and post.parking_available == criteria['parking_available']:
+            match_count += 1
+
+        if criteria.get('miles_to_campus') is not None and post.miles_to_campus <= criteria['miles_to_campus']:
             match_count += 1
 
         # Calculate match score (percentage of criteria matched)
