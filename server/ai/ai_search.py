@@ -114,7 +114,12 @@ def find_matching_listings(criteria: dict):
 
     if not ranked_posts:
         logger.info("No posts matched the criteria.")
-    
+    else:
+        # Log each post's ranking score
+        for i, post in enumerate(ranked_posts, 1):
+            logger.info(f"Rank {i}: Post ID {post.id} with title '{post.title}'")
+
+    # Convert posts to dictionaries and return sorted results
     return [post.to_dict() for post in ranked_posts]
 
 def rank_listings(posts, criteria):
@@ -185,7 +190,6 @@ def rank_listings(posts, criteria):
         if criteria.get('lease_type') is not None and post.lease_type == criteria['lease_type']:
             match_count += 1
 
-        # New fields
         if criteria.get('period') is not None and post.period == criteria['period']:
             match_count += 1
 
@@ -210,6 +214,10 @@ def rank_listings(posts, criteria):
 
     # Sort posts by match score in descending order
     ranked_list.sort(key=lambda x: x[0], reverse=True)
+
+    # Log match score for each ranked post
+    for rank, (match_score, post) in enumerate(ranked_list, start=1):
+        logger.info(f"Rank {rank}: Post ID {post.id} with title '{post.title}' has match score {match_score:.2f}")
 
     # Return only the posts, sorted by match score
     return [item[1] for item in ranked_list]
