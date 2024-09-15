@@ -25,6 +25,11 @@ def has_bus_routes():
     has_bus = Post.query.filter_by(Post.bus_routes_count >= 0).all()
     return jsonify(has_bus)
 
+@get_bp.route("/get_all")
+def get_all():
+    all = Post.query.all()
+    return jsonify(all)
+
 
 @get_bp.route('/user')
 @jwt_required()
