@@ -32,11 +32,15 @@ def search_with_criteria():
         "lease_length": data.get('lease_length') if 'lease_length' in data else None,  # String
         "utilities_included": data.get('utilities_included') if 'utilities_included' in data else None,  # Array of strings
         "proximity_to_stores": data.get('proximity_to_stores') if 'proximity_to_stores' in data else None,  # Array of strings
-        "bus_routes_count": int(data.get('bus_routes_count')) if 'bus_routes_count' in data else None,  
+        "bus_routes_count": int(data.get('bus_routes_count')) if 'bus_routes_count' in data else None,  # Integer
         "nationalities": data.get('nationalities') if 'nationalities' in data else None,  # Array of strings
         "deposit_required": int(data.get('deposit_required')) if 'deposit_required' in data else None,  # Integer
         "lease_type": data.get('lease_type') if 'lease_type' in data else None,  # String
-        "square_footage": int(data.get('square_footage')) if 'square_footage' in data else None  # Integer
+        "square_footage": int(data.get('square_footage')) if 'square_footage' in data else None,  # Integer
+        "smoking_allowed": data.get('smoking_allowed').lower() == 'true' if 'smoking_allowed' in data else None,  # Boolean
+        "parking_available": data.get('parking_available').lower() == 'true' if 'parking_available' in data else None,  # Boolean
+        "milesToCampus": float(data.get('milesToCampus')) if 'milesToCampus' in data else None,  # Float
+        "languages": data.get('languages') if 'languages' in data else None,  # Array of strings
     }
 
     # Filter out any criteria that are None

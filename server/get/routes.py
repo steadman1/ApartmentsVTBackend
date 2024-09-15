@@ -4,6 +4,30 @@ from server.auth.models import User
 from server.posts.models import Post
 from flask import jsonify
 
+nearby <= 3 miles
+near grocery stores
+nationality
+pets
+
+
+
+@get_bp.route('nats/<nationality>')
+def nationalities():
+    nats = Post.query.filter_by(Post.nationalities.any(nationality))
+    
+
+
+@get_bp.route('/pets')
+def pets():
+    pets_list = Post.query.filter_by(Post.present_pet_types==[]).all()
+    return jsonify(pets_list)
+
+@get_bp.route('/routes')
+def has_bus_routes():
+    has_bus = Post.query.filter_by(Post.bus_routes_count >= 0).all()
+    return jsonify(has_bus)
+
+
 @get_bp.route('/user')
 @jwt_required()
 def get_user():
