@@ -25,4 +25,7 @@ def create_app():
     from server.ai import ai_bp
     app.register_blueprint(ai_bp)
 
+    from server.get import get_bp
+    app.register_blueprint(get_bp)
+
     return app
