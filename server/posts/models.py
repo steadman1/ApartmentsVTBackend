@@ -73,6 +73,49 @@ class Post(db.Model):
     favoriteListing = db.Column(db.Boolean)
     milesToCampus = db.Column(db.Float)
 
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'title': self.title,
+            'price': self.price,
+            'roommate_count': self.roommate_count,
+            'summary': self.summary,
+            'roommate_bio': self.roommate_bio,
+            'present_pet_types': self.present_pet_types,
+            'address': self.address,
+            'walk_time': self.walk_time,
+            'bike_time': self.bike_time,
+            'drive_time': self.drive_time,
+            'bus_routes': self.bus_routes,
+            'gender_preferences': self.gender_preferences,
+            'nationalities': self.nationalities,
+            'ada_accessible': self.ada_accessible,
+            'proximity_to_stores': self.proximity_to_stores,
+            'rent_period_start': self.rent_period_start,
+            'rent_period_end': self.rent_period_end,
+            'lease_length': self.lease_length,
+            'utilities_included': self.utilities_included,
+            'furnished': self.furnished,
+            'square_footage': self.square_footage,
+            'bathroom_count': self.bathroom_count,
+            'bedroom_count': self.bedroom_count,
+            'pets_allowed': self.pets_allowed,
+            'deposit_required': self.deposit_required,
+            'lease_type': self.lease_type,
+            'apartment_complex_name': self.apartment_complex_name,
+            'period': self.period,
+            'property_type': self.property_type,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'smoking_allowed': self.smoking_allowed,
+            'parking_available': self.parking_available,
+            'images_urls': self.images_urls,
+            'favoriteListing': self.favoriteListing,
+            'milesToCampus': self.milesToCampus
+        }
+
     
     def __repr__(self):
         return f'<Post {self.title}>'

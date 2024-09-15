@@ -100,12 +100,21 @@ def ai_search(prompt: str):
 
 def find_matching_listings(criteria: dict):
     # Start with all posts
-    query = Post.query.all()  # Retrieve all posts instead of filtering
+    posts = Post.query.all()  # Retrieve all posts
+
+    # Log the number of posts retrieved
+    logger.info(f"Retrieved {len(posts)} posts from the database.")
+
+    if not posts:
+        logger.info("No posts found in the database.")
+        return []
 
     # Rank the posts based on the number of matching criteria
-    ranked_posts = rank_listings(query, criteria)
+    ranked_posts = rank_listings(posts, criteria)
 
-    # Convert posts to dictionaries for JSON serialization
+    if not ranked_posts:
+        logger.info("No posts matched the criteria.")
+    
     return [post.to_dict() for post in ranked_posts]
 
 def rank_listings(posts, criteria):
