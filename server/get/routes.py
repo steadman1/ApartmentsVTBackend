@@ -6,7 +6,7 @@ from flask import jsonify
 
 @get_bp.route('/grocery')
 def grocery():
-    stores = Post.query.filter(Post.proximity_to_stores.any('grocery store')).all()
+    stores = Post.query.filter(Post.proximity_to_stores.any(lambda store: store == 'Grocery Store')).all()
     return jsonify([post.to_dict() for post in stores])
 
 @get_bp.route('/nearby')
