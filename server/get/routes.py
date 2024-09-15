@@ -28,7 +28,7 @@ from flask import jsonify
 @get_bp.route("/get_all")
 def get_all():
     posts = Post.query.all()
-    return jsonify([post.serialize() for post in posts])
+    return jsonify([post.to_dict() for post in posts])
 
 
 @get_bp.route('/user')
