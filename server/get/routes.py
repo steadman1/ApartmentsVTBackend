@@ -90,7 +90,8 @@ def get_post(id):
             "urlToListing": post.url_to_listing,
             "smokingAllowed": post.smoking_allowed,
             "parkingAvailable": post.parking_available,
-            "customFields": post.custom_fields
+            "customFields": post.custom_fields,
+            "languages":post.languages
         }
         return jsonify(listing_data)
     else:

@@ -72,6 +72,7 @@ class Post(db.Model):
 
     favoriteListing = db.Column(db.Boolean)
     milesToCampus = db.Column(db.Float)
+    languages = db.Column(db.JSON)
 
 
     def to_dict(self):
@@ -114,7 +115,8 @@ class Post(db.Model):
             'images_urls': self.images_urls,
             'favoriteListing': self.favoriteListing,
             'milesToCampus': self.milesToCampus,
-            'url_to_listing': self.url_to_listing
+            'url_to_listing': self.url_to_listing,
+            'languages':self.languages
         }
 
     
