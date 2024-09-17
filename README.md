@@ -23,6 +23,3 @@ Finding a dedicated subleasing platform can be challenging, often pushing people
 
 ### What it does
 Our platform allows users to create, manage, and search sublease listings. With AI technology, users can input their preferences, and the system tailors results to best match their requirements and interests.
-
-Frontend for our VT Hacks 2024 project.  
-Find our project's backend on [GitHub here.](https://github.com/steadman1/VTHacks2024)
