@@ -4,9 +4,9 @@ Backend for our VTHacks 2024 project.
 Find our project's frontend on [GitHub here.]([https://github.com/steadman1/VTHacks2024](https://github.com/steadman1/ApartmentsVTFrontend))
 
 ### Team & Contributions
-- Spencer Steadman: Frontend, UI/UX, and REST API interaction handling.
 - Erdem Yilmaz: Backend, SQL Database Management, REST API Construction, Flask Server Development, and Hosting.
 - Alex Sleptsov: Backend, Microsoft Azure x OpenAI API implementation, and Filtering Fuctions.
+- Spencer Steadman: Frontend, UI/UX, and REST API interaction handling.
 
 ### Awards & Recognition
 - 2nd Place for Best Use of Microsoft AI to Enhance the Student Experience of Healthy Food, Public Transit, or Affordable Housing
